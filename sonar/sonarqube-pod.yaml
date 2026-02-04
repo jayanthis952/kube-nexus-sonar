@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sonar-pod
+  labels:
+    app: sonarqube
+spec:
+  containers:
+    - name: cont1
+      image: sonarqube:9.9.8-community
+      ports:
+        - containerPort: 9000
+      volumeMounts:
+        - name: sonar-data
+          mountPath: /opt/sonarqube/data
+        - name: sonar-ext
+          mountPath: /opt/sonarqube/extensions
+        - name: sonar-logs
+          mountPath: /opt/sonarqube/logs
+  tolerations:
+    - key: node
+      operator: Equal
+      value: sonar
+      effect: NoSchedule
+    - key: node
+      operator: Equal
+      value: sonar
+      effect: NoExecute
+  nodeSelector:
+    app: sonarqube
+  volumes:
+    - name: sonar-data
+      hostPath:
+        path: /data/sonar/data/
+        type: DirectoryOrCreate
+    - name: sonar-ext
+      hostPath:
+        path: /data/sonar/ext/
+        type: DirectoryOrCreate
+    - name: sonar-logs
+      hostPath:
+        path: /data/sonar/logs/
+        type: DirectoryOrCreate
+
+

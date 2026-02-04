@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+
+    # 1. Prometheus itself
+    - job_name: prometheus
+      static_configs:
+      - targets: ['localhost:9090']
+
+    # 2. Node Exporter (via Service)
+    - job_name: node-exporter
+      static_configs:
+      - targets:
+        - node-exporter.monitoring.svc.cluster.local:9100
+
+    # 3. kube-state-metrics (pod/deployment status, restarts, phase, etc.)
+    - job_name: kube-state-metrics
+      static_configs:
+      - targets:
+        - kube-state-metrics.monitoring.svc.cluster.local:8080
+
+    # 4. Jenkins on EC2
+    - job_name: jenkins-ec2
+      metrics_path: /prometheus
+      static_configs:
+      - targets:
+        - 172.31.29.18:8080
+
+    # 5. Nexus
+    - job_name: nexus
+      metrics_path: /service/metrics/prometheus
+      basic_auth:
+        username: "jenkins"
+        password: "jenkins123"
+      static_configs:
+      - targets:
+        - 13.50.251.252:30003
+
+    # 6. Sonar Qube
+    - job_name: "sonarqube"
+      metrics_path: /api/monitoring/metrics
+      basic_auth:
+       username: "admin"
+       password: "Sonarqube@123"
+      static_configs:
+      - targets:
+        - 13.50.251.252:30002
+
+    #7 docker-ec2
+    - job_name: "docker_Ec2"
+      metrics_path: /metrics
+      static_configs:
+        - targets:
+          - 13.51.167.42:9100
