@@ -33,7 +33,7 @@ data:
       metrics_path: /prometheus
       static_configs:
       - targets:
-        - 172.31.29.18:8080
+        - 13.63.34.141:8080
 
     # 5. Nexus
     - job_name: nexus
@@ -43,7 +43,7 @@ data:
         password: "jenkins123"
       static_configs:
       - targets:
-        - 13.50.251.252:30003
+        - 13.50.241.141:30003
 
     # 6. Sonar Qube
     - job_name: "sonarqube"
@@ -53,7 +53,7 @@ data:
        password: "Sonarqube@123"
       static_configs:
       - targets:
-        - 13.50.251.252:30002
+        - 13.50.241.141:30002
 
     #7 docker-ec2
     - job_name: "docker_Ec2"
